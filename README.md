@@ -13,7 +13,7 @@ touch requirements.yml
 ```yaml
 ---
 collections:
-  - name: https://github.com/ansible-collections/community.general.git
+  - name: https://github.com/gpproton/ansible-collections.git
     type: git
     version: main
 ```
