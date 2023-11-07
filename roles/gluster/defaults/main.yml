@@ -1,0 +1,25 @@
+---
+# vars file for roles/glusterfs-setup
+firewall_allowed_tcp_ports:
+  - 44925
+  # for gluster.
+  - 111
+  # Port-mapper for Gluster 3.4+.
+  # - 2049
+  # gluster daemon.
+  - 24007
+  # 24009+ for gluster <= 3.3; 49152+ for Gluster 3.4+ (one port per server).
+  - 24009
+  - 24010
+  - 49152
+  - 49153
+  - 55863
+  # gluster inline NFS server.
+  - 38465
+  - 38466
+  - 38468
+  - 38469
+  - 39543
+firewall_allowed_udp_ports:
+  - 111
+  - 963

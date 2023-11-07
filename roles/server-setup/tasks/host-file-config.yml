@@ -1,0 +1,13 @@
+---
+- name: update the /etc/hosts file from invetory hosts
+  become: true
+  become_user: root
+  lineinfile:
+    dest: "/etc/hosts"
+    regexp: ".*\t{{ hostvars[item]['ansible_host']}}\t{{ hostvars[item]['ansible_hostname']}}"
+    line: "{{ hostvars[item]['ansible_default_ipv4']['address'] }}\t{{ hostvars[item]['ansible_host']}}\t{{ hostvars[item]['ansible_hostname']}}"
+    state: present
+    backup: yes
+  register: etchosts
+  when: ansible_hostname != item|string or ansible_hostname == item|string
+  with_items: "{{groups['remote']}}"

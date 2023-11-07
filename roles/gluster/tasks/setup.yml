@@ -1,0 +1,52 @@
+---
+- name: ensure dependencies are installed.
+  apt:
+    name:
+      - gnupg2
+      - apt-transport-https
+      - ca-certificates
+    state: present
+
+- name: ensure repository pubkey for glusterfs is present.
+  apt_key:
+    url: "https://download.gluster.org/pub/gluster/glusterfs/{{ gluster_version }}/rsa.pub"
+    state: present
+  register: glusterfs_pub_key_added
+
+- name: get the DEB architecture.
+  command: dpkg --print-architecture
+  changed_when: false
+  register: deb_architecture
+
+- name: ensure debian repo is present.
+  apt_repository:
+    repo:
+      "deb https://download.gluster.org/pub/gluster/glusterfs/LATEST/Debian/\
+      {{ ansible_distribution_release }}/{{ deb_architecture.stdout }}/apt {{ ansible_distribution_release }} \
+      main"
+    state: present
+    filename: gluster
+  register: glusterfs_deb_source_added
+
+- name: ensure glusterfs will reinstall if the deb source was just added.
+  apt:
+    name:
+      - glusterfs-server
+      - glusterfs-client
+      - nfs-kernel-server
+    state: absent
+  when: glusterfs_deb_source_added.changed
+  tags: ["skip_ansible_lint"]
+
+- name: ensure glusterfS is installed.
+  apt:
+    name:
+      - glusterfs-server
+      - glusterfs-client
+    state: present
+
+- name: ensure that the glusterfs service is enabled and started
+  service:
+    name: glusterd
+    enabled: yes
+    state: started

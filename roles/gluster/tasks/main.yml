@@ -1,0 +1,4 @@
+---
+- import_tasks: setup.yml
+- import_tasks: cluster-setup.yml
+- import_tasks: volume-setup.yml

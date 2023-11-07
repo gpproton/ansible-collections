@@ -1,0 +1,25 @@
+---
+- name: Check if swarm is already created
+  docker_swarm_info:
+    nodes: yes
+  register: swarm_info
+  run_once: true
+  ignore_errors: true
+  delegate_to: "{{ groups.docker[0] }}"
+
+- name: Bootstrap docker swarm
+  docker_swarm:
+    state: present
+    advertise_addr: "{{ ansible_default_ipv4.address }}"
+    debug: yes
+  register: swarm_info
+  run_once: true
+  delegate_to: "{{ groups.docker[0] }}"
+  when: swarm_info.docker_swarm_active == false or swarm_info.docker_swarm_active is not defined
+
+- name: gather tokens from bootstrapped swarm
+  docker_swarm_info:
+    nodes: yes
+  register: swarm_info
+  run_once: true
+  delegate_to: "{{ groups.docker[0] }}"

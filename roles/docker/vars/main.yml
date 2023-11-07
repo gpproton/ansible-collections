@@ -1,0 +1,7 @@
+---
+node_ips: "{{ groups['gluster'] | map('extract', hostvars, ['ansible_default_ipv4.address']) | join(',') }}"
+docker_compose_version: 2.13.0
+docker_max_log_size: 50m
+docker_groupmembers:
+  - "{{ ansible_ssh_user  }}"
+  - root

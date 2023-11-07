@@ -1,0 +1,8 @@
+---
+- name: Add other swarm workers to bootstrapped cluster
+  docker_swarm:
+    state: join
+    remote_addrs: "{{ hostvars[groups.docker[0]]['ansible_default_ipv4']['address'] }}"
+    join_token: "{{ swarm_info.swarm_facts.JoinTokens.Worker }}"
+    advertise_addr: "{{ ansible_default_ipv4.address }}"
+  when: swarm_master is not defined
