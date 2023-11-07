@@ -23,3 +23,9 @@ install with:
 ```bash
 ansible-galaxy install -r requirements.yml
 ```
+
+
+## Refrences
+
+- [Ansible pilot](https://github.com/lucab85/ansible-pilot)
+- [Grafana Collection](https://github.com/grafana/grafana-ansible-collection)
