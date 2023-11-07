@@ -1,0 +1,53 @@
+---
+- name: create traefik certs config directory in glusterfs
+  file:
+    path: "{{ traefik_cert_dir }}"
+    mode: "0755"
+    state: directory
+  when: inventory_hostname in groups['gluster'][0]
+
+- name: create traefik certs keys directory in glusterfs
+  file:
+    path: "{{ traefik_cert_key_dir }}"
+    mode: "0755"
+    state: directory
+  when: inventory_hostname in groups['gluster'][0]
+
+- name: create temp directory
+  tempfile:
+    state: directory
+    suffix: traefik
+  register: temp_dir
+  when: inventory_hostname in groups['swarm_masters'][0]
+
+- name: interpolate docker-compose file
+  template:
+    src: docker-compose.yaml.j2
+    dest: "{{ temp_dir.path }}/docker-compose.yaml"
+  when: inventory_hostname in groups['swarm_masters'][0]
+
+- name: interpolate traefik static config file
+  template:
+    src: traefik.static.toml.j2
+    dest: "{{ temp_dir.path }}/traefik.static.toml"
+  when: inventory_hostname in groups['swarm_masters'][0]
+
+- name: interpolate traefik dynamic config file
+  template:
+    src: traefik.dynamic.toml.j2
+    dest: "{{ temp_dir.path }}/traefik.dynamic.toml"
+  when: inventory_hostname in groups['swarm_masters'][0]
+
+- name: create basic auth file
+  file:
+    path: "{{ temp_dir.path }}/admin.basic-auth"
+    state: touch
+    mode: u=rw,g=rw,o=rw
+  when: inventory_hostname in groups['swarm_masters'][0]
+- name: add auth details to file
+  shell: echo "$(htpasswd -nb {{ htpass_user }} {{ htpass_auth }})" | tee -a {{ temp_dir.path }}/admin.basic-auth
+  when: inventory_hostname in groups['swarm_masters'][0]
+
+- name: deploy traefik in swarm
+  command: "docker stack deploy --compose-file {{ temp_dir.path }}/docker-compose.yaml --prune traefik"
+  when: inventory_hostname in groups['swarm_masters'][0]

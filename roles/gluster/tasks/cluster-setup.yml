@@ -1,0 +1,29 @@
+---
+- name: allow gluster TCP ports
+  iptables:
+    chain: INPUT
+    protocol: tcp
+    destination_ports: "{{firewall_allowed_tcp_ports}}"
+    jump: ACCEPT
+
+- name: allow gluster UDP ports
+  iptables:
+    chain: INPUT
+    protocol: udp
+    destination_ports: "{{firewall_allowed_udp_ports}}"
+    jump: ACCEPT
+
+- name: add peers to gluster cluster
+  gluster_peer:
+    state: present
+    nodes: "{{ all_hostnames  }}"
+  delegate_to: "{{ all_hostnames | first }}"
+
+- name: ensure gluster brick and mount directories exist.
+  file:
+    path: "{{ item }}"
+    state: directory
+    mode: 0775
+  with_items:
+    - "{{ gluster_brick_dir }}"
+    - "{{ gluster_mount_dir }}"

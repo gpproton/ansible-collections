@@ -1,0 +1,68 @@
+---
+- name: create gluster volume
+  gluster_volume:
+    state: present
+    name: "{{ gluster_brick_name }}"
+    brick: "{{ gluster_brick_dir }}"
+    # rebalance: yes
+    cluster: "{{ gluster_hostnames }}"
+    replicas: "{{ gluster_replicas }}"
+    host: "{{ inventory_hostname }}"
+    force: yes
+  run_once: true
+
+- name: set multiple options on glusterfS volume
+  gluster_volume:
+    state: present
+    name: "{{ gluster_brick_name }}"
+    options:
+      {
+        performance.cache-size: 128MB,
+        storage.health-check-interval: "0",
+        write-behind: "off",
+        quick-read: "on",
+      }
+  run_once: true
+  # when: inventory_hostname in groups['gluster']
+
+- name: start gluster volume
+  gluster_volume:
+    state: started
+    name: "{{ gluster_brick_name }}"
+  run_once: true
+
+- name: ensure gluster volume is mounted.
+  mount:
+    name: "{{ gluster_mount_dir }}"
+    src: "localhost:/{{ gluster_brick_name }}"
+    fstype: glusterfs
+    opts: "defaults,_netdev"
+    state: mounted
+
+- name: fstab configuration
+  mount:
+    path: "{{ gluster_mount_dir }}"
+    src: "localhost:/{{ gluster_brick_name }}"
+    fstype: glusterfs
+    opts: "defaults,_netdev,backupvolfile-server={{ inventory_hostname }}"
+    dump: 0
+    passno: 0
+    state: present
+  register: mount_output
+
+- name: fstab confirmation
+  debug:
+    msg: "{{ mount_output }}"
+
+- name: remount fstab volumes
+  shell: mount -a
+
+- name: set brick permissions
+  file:
+    path: "{{ gluster_mount_dir }}"
+    state: directory
+    owner: "{{ ansible_ssh_user }}"
+    group: users
+    mode: 0750
+    recurse: yes
+  become: true

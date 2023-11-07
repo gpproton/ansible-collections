@@ -1,0 +1,82 @@
+[tls.options.default]
+cipherSuites = [
+  "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+  "TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256",
+  "TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256",
+  "TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256",
+  "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
+  "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384",
+]
+minVersion = "VersionTLS13"
+
+[http]
+[http.middlewares.sample-strip.stripPrefix]
+prefixes = ["/api", "/api/"]
+
+[http.middlewares.https-redirect.redirectScheme]
+permanent = true
+scheme = "https"
+
+[http.middlewares.default-cors.headers]
+accessControlAllowMethods = "GET,POST,PUT,OPTIONS"
+accessControlAllowOriginlist = "*"
+accessControlMaxAge = 86_400
+
+[http.middlewares.default-headers.headers]
+browserXssFilter = true
+contentTypeNosniff = true
+customFrameOptionsValue = "SAMEORIGIN"
+forceSTSHeader = true
+frameDeny = true
+stsIncludeSubdomains = true
+stsPreload = true
+stsSeconds = 15_552_000
+
+[http.middlewares.default-headers.headers.customRequestHeaders]
+X-Forwarded-Proto = "https"
+
+[http.middlewares.default-headers.headers.customResponseHeaders]
+server = ""
+x-powered-by = ""
+
+[http.middlewares.default-whitelist.ipWhiteList]
+sourceRange = ["10.0.0.0/8", "192.168.0.0/16", "172.16.0.0/12"]
+
+[http.middlewares.secured.chain]
+middlewares = ["default-whitelist", "default-headers"]
+
+[http.middlewares.basic-auth.basicauth]
+headerField = "X-WebAuth-User"
+realm = "default control Auth"
+removeheader = true
+usersfile = "/admin.basic-auth"
+
+[http.middlewares.redirect-non-www-to-www.redirectRegex]
+permanent = true
+regex = "^https?://(?:www\\.)?(.+)"
+replacement = "https://www.${1}"
+
+[http.middlewares.redirect-www-to-non-www.redirectRegex]
+permanent = true
+regex = "^https?://www\\.(.+)"
+replacement = "https://${1}"
+
+[http.routers]
+[http.routers.mail]
+rule = "Host(`mail.{{ root_domain }}`) || Host(`mail.peter.com.ng`) || Host(`mail.godwin.dev`) || Host(`mail.elevens.cloud`) || Host(`autodiscover.{{ root_domain }}`) || Host(`autoconfig.{{ root_domain }}`) || Host(`autodiscover.godwin.dev`) || Host(`autoconfig.godwin.dev`) || Host(`autodiscover.peter.com.ng`) || Host(`autoconfig.peter.com.ng`)"
+service = "mail"
+entrypoints = "web-secure"
+[http.routers.mail.tls]
+certResolver = "default"
+
+[http.routers.webmail]
+rule = "Host(`webmail.{{ root_domain }}`)"
+service = "mail"
+entrypoints = "web-secure"
+[http.routers.webmail.tls]
+certResolver = "cloudflare"
+
+[http.services]
+[http.services.mail.loadBalancer]
+[[http.services.mail.loadBalancer.servers]]
+url = "{{ mail_frontend }}"

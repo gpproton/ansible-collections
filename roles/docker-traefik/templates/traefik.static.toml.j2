@@ -1,0 +1,62 @@
+accesslog = true
+
+[experimental]
+http3 = true
+
+[global]
+checkNewVersion = false
+sendAnonymousUsage = false
+
+[serversTransport]
+insecureSkipVerify = true
+
+[log]
+level = "INFO"
+
+[api]
+dashboard = true
+insecure = true
+
+[providers]
+[providers.docker]
+endpoint = "tcp://socket-proxy:2375"
+exposedbydefault = false
+network = "{{ traefik_network }}"
+swarmMode = true
+swarmModeRefreshSeconds = 5
+watch = true
+[providers.file]
+filename = "/traefik.dynamic.toml"
+watch = true
+
+[certificatesResolvers]
+[certificatesResolvers.default.acme]
+email = "{{ admin_email }}"
+storage = "/certificates/letsencrypt.json"
+[certificatesResolvers.default.acme.httpChallenge]
+entryPoint = "web-insecure"
+[certificatesResolvers.cloudflare.acme]
+email = "{{ admin_email }}"
+storage = "/certificates/cloudflare.json"
+[certificatesResolvers.cloudflare.acme.dnsChallenge]
+provider = "cloudflare"
+delayBeforeCheck = 90
+
+[entryPoints]
+[entryPoints.web-insecure]
+address = ":80"
+[entryPoints.web-insecure.proxyProtocol]
+insecure = true
+[entryPoints.web-insecure.forwardedHeaders]
+insecure = true
+[entryPoints.web-insecure.http.redirections.entryPoint]
+scheme = "https"
+to = "web-secure"
+permanent = true
+
+[entryPoints.web-secure]
+address = ":443"
+[entryPoints.web-secure.http3]
+advertisedPort = 443
+[entryPoints.web-secure.http.tls]
+certResolver = "default"
