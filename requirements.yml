@@ -1,7 +1,4 @@
 ---
 collections:
   - name: community.general
-  # - name: https://github.com/ansible-collections/community.general.git
-  #   type: git
-  #   version: main
 
