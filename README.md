@@ -29,3 +29,4 @@ ansible-galaxy install -r requirements.yml
 
 - [Ansible pilot](https://github.com/lucab85/ansible-pilot)
 - [Grafana Collection](https://github.com/grafana/grafana-ansible-collection)
+- [Geerlingguy Ansible](https://github.com/geerlingguy/ansible-role-docker)
