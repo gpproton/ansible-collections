@@ -1,2 +1,14 @@
 ---
-# tasks file for roles/desktop-dev-ide
+- name: jetbrains apps setup
+  ansible.builtin.include_tasks:
+    file: setup-jetbrains.yml
+    apply:
+      become: false
+
+- name: vscode setup
+  ansible.builtin.include_tasks:
+    file: setup-vscode.yml
+    apply:
+      become: true
+
+

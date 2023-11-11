@@ -13,3 +13,14 @@
 
 - name: setup dotnet LTS version
   ansible.builtin.shell: "{{ dotnet_path }}/dotnet-install -c LTS --install-dir {{ dotnet_path }}"
+
+- name: install additional dotnet packages
+  become: true
+  ansible.builtin.dnf:
+    state: present
+    name:
+      - mono-devel
+
+- name: install basic workloads
+  ansible.builtin.shell: "{{ dotnet_path }}/dotnet workload install wasm-tools wasm-experimental"
+
