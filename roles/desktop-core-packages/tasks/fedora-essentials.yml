@@ -1,0 +1,96 @@
+---
+- name: add flatpak repository to the user installation
+  community.general.flatpak_remote:
+    name: flathub
+    state: present
+    flatpakrepo_url: https://flathub.org/repo/flathub.flatpakrepo
+    enabled: true
+
+- name: install gnome extensions essential packages
+  ansible.builtin.package:
+    name:
+      - gnome-extensions-app
+      - gnome-shell-extension-appindicator
+      - gnome-shell-extension-caffeine
+      - gnome-shell-extension-dash-to-dock
+      - gnome-shell-extension-gsconnect
+      - gnome-shell-extension-just-perfection
+      - gnome-shell-extension-openweather
+      - gnome-shell-extension-user-theme
+    state: present
+
+- name: install essential utility packages
+  ansible.builtin.package:
+    name:
+      - git
+      - bash
+      - zsh
+      - util-linux-user
+      - curl
+      - wget
+      - zip
+      - unzip
+      - file
+      - xz
+      - gnome-tweak-tool
+      - timeshift
+      - gstreamer1-vaapi
+    state: present
+
+- name: install essential flatfak packages
+  community.general.flatpak:
+    name:
+      - org.gnome.NetworkDisplays
+    state: absent
+
+- name: Install the 'sound-and-video' package group
+  ansible.builtin.dnf:
+    name: '@sound-and-video'
+    state: present
+
+- name: Setup media codes
+  shell: |
+    sudo dnf install -y gstreamer1-plugins-{bad-\*,good-\*,ugly-\*,base} --exclude=gstreamer1-plugins-bad-free-devel ffmpeg gstreamer-ffmpeg
+    sudo dnf group upgrade --with-optional Multimedia
+    sudo dnf config-manager --set-enabled fedora-cisco-openh264
+
+- name: install additonal media packages for Fedora
+  ansible.builtin.dnf:
+    name:
+      - gstreamer1-libav
+      - lame*
+      - gstreamer1-plugin-openh264
+      - mozilla-openh264
+    state: present
+    exclude:
+      - lame-devel
+
+- name: install fonts for Fedora
+  ansible.builtin.dnf:
+    state: present
+    name:
+      - fira-code-fonts
+      - mozilla-fira*
+      - google-roboto*
+
+- name: Ensuring Homebrew Is Installed
+  ansible.builtin.stat:
+    path: /usr/local/bin/brew
+  register: homebrew_check
+
+- name: install ruby Fedora
+  ansible.builtin.dnf:
+    state: present
+    name: ruby
+
+- name: Installing Homebrew
+  become: false
+  ansible.builtin.shell: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+  when:
+    - not homebrew_check.stat.exists
+
+- name: Updating Homebrew
+  become: false
+  community.general.homebrew:
+    update_homebrew: true
+  when: homebrew_check.stat.exists

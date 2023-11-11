@@ -1,0 +1,20 @@
+- name: make sure we have a 'wheel' group
+  group:
+    name: wheel
+    state: present
+
+- name: allow 'wheel' group to have passwordless sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%wheel'
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    validate: visudo -cf %s
+
+- name: add sudoers users to wheel group
+  user:
+    name: "{{ item }}"
+    groups: wheel
+    append: yes
+  with_items:
+    - "{{ lookup('env', 'USER') }}"

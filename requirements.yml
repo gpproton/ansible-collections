@@ -1,4 +1,5 @@
 ---
+roles:
+  - name: viasite-ansible.zsh
 collections:
   - name: community.general
-

@@ -1,0 +1,8 @@
+---
+- hosts: localhost
+  become: true
+  pre_tasks: []
+  roles:
+    - desktop-core-packages
+    - desktop-dev-tools
+  tasks: []

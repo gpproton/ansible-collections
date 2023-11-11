@@ -1,0 +1,22 @@
+- name: Add rpmfusion free repositories
+  ansible.builtin.dnf:
+    name:
+      - "https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-{{ ansible_distribution_major_version }}.noarch.rpm"
+      - "https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-{{ ansible_distribution_major_version }}.noarch.rpm"
+    state: present
+
+- name: Install the 'core' package group
+  ansible.builtin.dnf:
+    name: '@core'
+    state: present
+
+- name: enable fedy copr repo
+  community.general.copr:
+    state: enabled
+    name: 'kwizart/fedy'
+
+- name: install fedy package
+  ansible.builtin.dnf:
+    name: fedy
+    state: present
+    update_cache: true

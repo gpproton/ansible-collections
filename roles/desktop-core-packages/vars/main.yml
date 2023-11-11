@@ -1,0 +1,3 @@
+---
+vars:
+  zsh_user: "{{ lookup('env', 'USER') }}"
