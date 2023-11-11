@@ -1,0 +1,6 @@
+---
+- name: install vscode package
+  ansible.builtin.package:
+    name: code
+    state: present
+  when: ansible_distribution == "Fedora"
