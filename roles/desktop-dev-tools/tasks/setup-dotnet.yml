@@ -1,0 +1,15 @@
+---
+- name: create .dotnet directory
+  ansible.builtin.file:
+    path: "{{ dotnet_path }}"
+    state: directory
+    mode: 0775
+
+- name: setup dotnet installer binary
+  ansible.builtin.get_url:
+    url: "https://dotnet.microsoft.com/download/dotnet/scripts/v1/dotnet-install.sh"
+    dest: "{{ dotnet_path }}/dotnet-install"
+    mode: a+x
+
+- name: setup dotnet LTS version
+  ansible.builtin.shell: "{{ dotnet_path }}/dotnet-install -c LTS --install-dir {{ dotnet_path }}"
