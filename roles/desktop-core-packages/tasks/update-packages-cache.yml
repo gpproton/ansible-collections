@@ -1,0 +1,9 @@
+- name: update packages cache for Fedora
+  ansible.builtin.dnf:
+    update_cache: true
+  when: ansible_distribution == "Fedora"
+
+- name: update packages cache for Debian/Ubuntu
+  ansible.builtin.apt:
+    update_cache: yes
+  when: ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"

@@ -1,0 +1,37 @@
+- name: install core dev packages
+  ansible.builtin.dnf:
+    state: present
+    name:
+      - mesa-libGLU
+      - clang
+      - cmake
+      - make
+      - automake
+      - gcc
+      - gcc-c++
+      - autoconf
+      - ninja-build
+      - pkg-config
+      - gtk3-devel
+      - pciutils
+      - elfutils-libelf-devel
+      - libglvnd-opengl
+      - libglvnd-glx
+      - libglvnd-devel
+      - boost-devel
+      - redhat-rpm-config
+      - golang
+      - procps-ng
+      - libxcrypt-compat
+
+- name: Install the 'virtualization' package group
+  ansible.builtin.dnf:
+    name: '@virtualization'
+    state: present
+
+- name: start and enable service libvirtd, if it's not
+  ansible.builtin.systemd:
+    name: libvirtd
+    state: started
+    enabled: true
+

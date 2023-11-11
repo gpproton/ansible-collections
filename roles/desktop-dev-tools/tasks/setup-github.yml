@@ -1,0 +1,32 @@
+---
+- name: import key for github-desktop
+  ansible.builtin.rpm_key:
+    state: present
+    key: https://rpm.packages.shiftkey.dev/gpg.key
+
+- name: setup github-desktop repo
+  ansible.builtin.blockinfile:
+    path: /etc/yum.repos.d/shiftkey-packages.repo
+    state: present
+    create: true
+    insertafter: EOF
+    block: |
+      [shiftkey-packages]
+      name=GitHub Desktop
+      baseurl=https://rpm.packages.shiftkey.dev/rpm/
+      enabled=1
+      gpgcheck=1
+      repo_gpgcheck=1
+      gpgkey=https://rpm.packages.shiftkey.dev/gpg.key
+
+- name: install github packages
+  ansible.builtin.dnf:
+    name:
+      - gh
+      - github-desktop
+      - act
+    update_cache: true
+
+# - name: added act cli as github extension
+#   become: false
+#   shell: gh extension install https://github.com/nektos/gh-act
