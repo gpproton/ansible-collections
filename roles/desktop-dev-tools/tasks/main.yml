@@ -31,3 +31,9 @@
     file: setup-dotnet.yml
     apply:
       become: false
+
+- name: setup nodejs for unix
+  ansible.builtin.include_tasks:
+    file: setup-nodejs.yml
+    apply:
+      become: false

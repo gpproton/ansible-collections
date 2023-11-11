@@ -1,1 +1,43 @@
 ---
+- name: install nvm
+  ansible.builtin.shell: "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash"
+
+- name: ensuring nvm Is Installed
+  ansible.builtin.stat:
+    path: $HOME/.nvm
+  register: nvm_check
+
+- name: node.js LTS install
+  shell: |
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+    nvm install --lts
+  when:
+    - not nvm_check.stat.exists
+
+- name: ensuring pnpm Is Installed
+  ansible.builtin.stat:
+    path: $HOME/.local/share/pnpm
+  register: pnpm_check
+
+- name: pnpm installation
+  shell: curl -fsSL https://get.pnpm.io/install.sh | sh -
+  when:
+    - not pnpm_check.stat.exists
+
+- name: global package installation
+  community.general.pnpm:
+    name: "{{ item }}"
+    global: true
+    state: latest
+  with_items:
+    - npm
+    - yarn
+    - pnpm
+    - typescript
+    - ts-node
+    - tsx
+    - rimraf
+
+
