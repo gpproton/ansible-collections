@@ -35,3 +35,17 @@
     state: started
     enabled: true
 
+
+- name: install essential flatfak packages
+  community.general.flatpak:
+    state: present
+    name:
+      - org.mozilla.Thunderbird
+      - com.boxy_svg.BoxySVG
+      - com.icons8.Lunacy
+      - com.getpostman.Postman
+      - com.mongodb.Compass
+      - io.dbeaver.DBeaverCommunity
+      - com.emqx.MQTTX
+
+

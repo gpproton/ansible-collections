@@ -41,7 +41,9 @@
   community.general.flatpak:
     name:
       - org.gnome.NetworkDisplays
-    state: absent
+      - com.skype.Client
+      - org.freedownloadmanager.Manager
+    state: present
 
 - name: Install the 'sound-and-video' package group
   ansible.builtin.dnf:

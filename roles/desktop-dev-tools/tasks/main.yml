@@ -37,3 +37,11 @@
     file: setup-nodejs.yml
     apply:
       become: false
+
+- name: setup jdk for unix
+  ansible.builtin.include_tasks:
+    file: setup-jdk.yml
+    apply:
+      become: false
+
+
