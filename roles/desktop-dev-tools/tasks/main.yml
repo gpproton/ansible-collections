@@ -18,3 +18,10 @@
     apply:
       become: true
   when: ansible_distribution == "Fedora"
+
+- name: setup virtualization and general dev packages for Fedora
+  ansible.builtin.include_tasks:
+    file: fedora-docker.yml
+    apply:
+      become: true
+  when: ansible_distribution == "Fedora"
