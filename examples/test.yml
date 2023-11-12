@@ -5,4 +5,5 @@
   roles:
     - desktop-core-packages
     - desktop-dev-tools
+    - desktop-dev-ide
   tasks: []
