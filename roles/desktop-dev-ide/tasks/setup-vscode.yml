@@ -19,6 +19,7 @@
     - sibiraj-s.vscode-scss-formatter
     - wayou.vscode-todo-highlight
     - vscode-icons-team.vscode-icons
+    - golang.go
     - ms-dotnettools.csharp
     - ms-dotnettools.csdevkit
     - ms-dotnettools.vscode-dotnet-runtime
