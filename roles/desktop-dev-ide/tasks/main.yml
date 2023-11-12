@@ -9,6 +9,5 @@
   ansible.builtin.include_tasks:
     file: setup-vscode.yml
     apply:
-      become: true
-
+      become: false
 

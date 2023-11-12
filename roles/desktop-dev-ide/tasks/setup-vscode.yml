@@ -3,4 +3,37 @@
   ansible.builtin.package:
     name: code
     state: present
+  become: true
   when: ansible_distribution == "Fedora"
+
+- name: install extensions
+  ansible.builtin.shell: code --install-extension {{ item }}
+  with_items:
+    - eamodio.gitlens
+    - GitHub.vscode-pull-request-github
+    - donjayamanne.githistory
+    - GitHub.github-vscode-theme
+    - redhat.ansible
+    - ms-python.python
+    - donjayamanne.python-extension-pack
+    - sibiraj-s.vscode-scss-formatter
+    - wayou.vscode-todo-highlight
+    - vscode-icons-team.vscode-icons
+    - golang.go
+    - ms-dotnettools.csharp
+    - ms-dotnettools.csdevkit
+    - ms-dotnettools.vscode-dotnet-runtime
+    - ms-dotnettools.blazorwasm-companion
+    - ms-dotnettools.dotnet-maui
+    - unoplatform.vscode
+    - oven.bun-vscode
+    - Nuxtr.nuxt-vscode-extentions
+    - Vue.vscode-typescript-vue-plugin
+    - Angular.ng-template
+    - esbenp.prettier-vscode
+    - dbaeumer.vscode-eslint
+    - eliostruyf.vscode-typescript-exportallmodules
+
+- name: disble all extension by default
+  ansible.builtin.shell: code --disable-extensions
+

@@ -15,6 +15,21 @@
     name: viasite-ansible.zsh
   vars:
     zsh_user: "{{ lookup('env', 'USER') }}"
+    zsh_powerlevel9k_always_show_context_bool: false
+
+- name: tweak powerlevel display
+  become: false
+  ansible.builtin.lineinfile:
+    path: "$HOME/.p10k.zsh"
+    create: true
+    state: present
+    regexp: "^{{ item.key }}="
+    line: "{{ item.key }}={{ item.value}}"
+  with_items:
+    - key: POWERLEVEL9K_SHORTEN_DIR_LENGTH
+      value: 1
+    - key: POWERLEVEL9K_SHORTEN_STRATEGY
+      value: truncate_to_last
 
 - name: install powerline fonts in Fedora
   ansible.builtin.dnf:
@@ -66,6 +81,7 @@
       source $HOME/zsh-autocomplete/zsh-autocomplete.plugin.zsh
       eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
+      ## start shell-assist
       ALIAS_PATH="$HOME/shell-assist/alias"
       if [ -d $ALIAS_PATH ]; then
         for rc in $ALIAS_PATH/*.sh; do
@@ -74,6 +90,7 @@
           fi
         done
       fi
+      ## end shell-assist
       
       ## start dotnet
       export DOTNET_ROOT={{ dotnet_path }}
@@ -82,6 +99,21 @@
       export ASPNETCORE_Kestrel__Certificates__Default__Password=""
       export ASPNETCORE_Kestrel__Certificates__Default__Path="$HOME/localhost.pfx"
       ## end dotnet
+
+      ## Jetbrains start
+      export JETBRAINS="$HOME/.local/share/JetBrains/Toolbox/scripts"
+      export PATH=$PATH:$JETBRAINS
+      # Added by Toolbox App
+      export PATH="$PATH:/home/leanny/.local/share/JetBrains/Toolbox/scripts"
+      ## Jetbrains end
+
+      export ANDROID_HOME=$HOME/Android/Sdk
+      export PATH=$PATH:$ANDROID_HOME:$ANDROID_HOME/tools
+      export PATH=$PATH:$ANDROID_HOME/tools/bin
+      export PATH=$PATH:$ANDROID_HOME/platform-tools
+
+      ## Sample usage => avd <name-of-emulator> | emulator -list-avds
+      function avd { cd "$(dirname "$(which emulator)")" && ./emulator -avd "$@"; }
 
 - name: setup shell assist alias
   become: false
