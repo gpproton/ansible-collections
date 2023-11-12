@@ -15,6 +15,21 @@
     name: viasite-ansible.zsh
   vars:
     zsh_user: "{{ lookup('env', 'USER') }}"
+    zsh_powerlevel9k_always_show_context_bool: false
+
+- name: tweak powerlevel display
+  become: false
+  ansible.builtin.lineinfile:
+    path: "$HOME/.p10k.zsh"
+    create: true
+    state: present
+    regexp: "^{{ item.key }}="
+    line: "{{ item.key }}={{ item.value}}"
+  with_items:
+    - key: POWERLEVEL9K_SHORTEN_DIR_LENGTH
+      value: 1
+    - key: POWERLEVEL9K_SHORTEN_STRATEGY
+      value: truncate_to_last
 
 - name: install powerline fonts in Fedora
   ansible.builtin.dnf:
