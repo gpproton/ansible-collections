@@ -26,6 +26,16 @@
   when:
     - not pnpm_check.stat.exists
 
+- name: ensuring bun Is Installed
+  ansible.builtin.stat:
+    path: $HOME/.bun
+  register: bun_check
+
+- name: bun installation
+  shell: curl -fsSL https://bun.sh/install | bash
+  when:
+    - not bun_check.stat.exists
+
 - name: global package installation
   community.general.pnpm:
     name: "{{ item }}"
