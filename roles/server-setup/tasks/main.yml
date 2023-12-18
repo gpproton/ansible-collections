@@ -1,6 +1,0 @@
----
-- include_tasks: timezone-config.yml
-- include_tasks: host-file-config.yml
-- include_tasks: system-limits.yml
-- include_tasks: system-ulimits.yml
-- include_tasks: grub-setup.yml
