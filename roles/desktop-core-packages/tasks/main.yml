@@ -35,9 +35,25 @@
       become: true
   when: ansible_distribution == "Fedora"
 
+- name: setup essential packages
+  ansible.builtin.include_tasks:
+    file: essential-packages.yml
+    apply:
+      become: true
+
 - name: setup essential packages for Fedora
   ansible.builtin.include_tasks:
     file: fedora-essentials.yml
     apply:
       become: true
   when: ansible_distribution == "Fedora"
+
+- name: homebrew setup
+  ansible.builtin.include_tasks:
+    file: homebrew-setup.yml
+    apply:
+      become: true
+
+- name: flatpak packages
+  ansible.builtin.include_tasks:
+    file: flatpak-packages.yml

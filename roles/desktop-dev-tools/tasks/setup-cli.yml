@@ -16,6 +16,8 @@
   vars:
     zsh_user: "{{ lookup('env', 'USER') }}"
     zsh_powerlevel9k_always_show_context_bool: false
+    zsh_hotkeys_extras:
+      - { hotkey: '^r', action: fzf-history }
 
 - name: tweak powerlevel display
   become: false
@@ -37,6 +39,12 @@
     state: present
   when: ansible_distribution == "Fedora"
 
+- name: install powerline fonts in Debain or Ubuntu
+  ansible.builtin.dnf:
+    name: fonts-powerline
+    state: present
+  when: ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
+
 - name: fix for zsh error
   become: false
   ansible.builtin.blockinfile:
@@ -44,7 +52,7 @@
     insertafter: "antigen version: "
     state: present
     block: |
-      alias fdfind='fd'
+      # alias fdfind='fd'
       alias shopt='/usr/bin/shopt'
       [[ ! -f ~/.bashrc ]] || source ~/.bashrc
 

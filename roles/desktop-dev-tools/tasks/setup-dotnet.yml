@@ -16,7 +16,7 @@
 
 - name: install additional dotnet packages
   become: true
-  ansible.builtin.dnf:
+  ansible.builtin.package:
     state: present
     name:
       - mono-devel

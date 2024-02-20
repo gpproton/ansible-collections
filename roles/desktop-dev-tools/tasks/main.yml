@@ -50,5 +50,3 @@
     file: setup-jdk.yml
     apply:
       become: false
-
-

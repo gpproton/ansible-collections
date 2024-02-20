@@ -49,6 +49,6 @@
     - ts-node
     - tsx
     - rimraf
-    - @nestjs/cli
+    - "@nestjs/cli"
 
 

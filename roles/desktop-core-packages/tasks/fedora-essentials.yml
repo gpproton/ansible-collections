@@ -1,48 +1,14 @@
 ---
-- name: add flatpak repository to the user installation
-  community.general.flatpak_remote:
-    name: flathub
-    state: present
-    flatpakrepo_url: https://flathub.org/repo/flathub.flatpakrepo
-    enabled: true
 
-- name: install gnome extensions essential packages
-  ansible.builtin.package:
-    name:
-      - gnome-extensions-app
-      - gnome-shell-extension-appindicator
-      - gnome-shell-extension-caffeine
-      - gnome-shell-extension-dash-to-dock
-      - gnome-shell-extension-gsconnect
-      - gnome-shell-extension-just-perfection
-      - gnome-shell-extension-openweather
-      - gnome-shell-extension-user-theme
-    state: present
 
 - name: install essential utility packages
   ansible.builtin.package:
     name:
-      - git
-      - bash
-      - zsh
       - util-linux-user
-      - curl
-      - wget
-      - zip
-      - unzip
-      - file
       - xz
       - gnome-tweak-tool
       - timeshift
       - gstreamer1-vaapi
-    state: present
-
-- name: install essential flatfak packages
-  community.general.flatpak:
-    name:
-      - org.gnome.NetworkDisplays
-      - com.skype.Client
-      - org.freedownloadmanager.Manager
     state: present
 
 - name: Install the 'sound-and-video' package group
@@ -75,24 +41,15 @@
       - mozilla-fira*
       - google-roboto*
 
-- name: Ensuring Homebrew Is Installed
-  ansible.builtin.stat:
-    path: /usr/local/bin/brew
-  register: homebrew_check
-
-- name: install ruby Fedora
-  ansible.builtin.dnf:
+- name: install gnome extensions essential packages
+  ansible.builtin.package:
+    name:
+      - gnome-extensions-app
+      - gnome-shell-extension-appindicator
+      - gnome-shell-extension-caffeine
+      - gnome-shell-extension-dash-to-dock
+      - gnome-shell-extension-gsconnect
+      - gnome-shell-extension-just-perfection
+      - gnome-shell-extension-openweather
+      - gnome-shell-extension-user-theme
     state: present
-    name: ruby
-
-- name: Installing Homebrew
-  become: false
-  ansible.builtin.shell: /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
-  when:
-    - not homebrew_check.stat.exists
-
-- name: Updating Homebrew
-  become: false
-  community.general.homebrew:
-    update_homebrew: true
-  when: homebrew_check.stat.exists
