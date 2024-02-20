@@ -1,0 +1,13 @@
+---
+- name: install essential utility packages
+  ansible.builtin.package:
+    name:
+      - git
+      - bash
+      - zsh
+      - curl
+      - wget
+      - zip
+      - unzip
+      - file
+    state: present
