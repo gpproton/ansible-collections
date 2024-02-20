@@ -1,0 +1,22 @@
+---
+- name: install essential utility packages
+  ansible.builtin.package:
+    name:
+      - flatpak
+      - gnome-software-plugin-flatpak
+    state: present
+
+- name: add flatpak repository to the user installation
+  community.general.flatpak_remote:
+    name: flathub
+    state: present
+    flatpakrepo_url: https://flathub.org/repo/flathub.flatpakrepo
+    enabled: true
+
+- name: install essential flatfak packages
+  community.general.flatpak:
+    name:
+      - org.gnome.NetworkDisplays
+      - com.skype.Client
+      - org.freedownloadmanager.Manager
+    state: present
