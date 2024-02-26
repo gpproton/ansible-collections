@@ -4,6 +4,7 @@
   ansible.builtin.dnf:
     name: "https://rpms.remirepo.net/fedora/remi-release-39.rpm"
     state: present
+  when: ansible_distribution == "Fedora"
 
 - name: enable PHP {{ php_version }} remi repo
   shell: "dnf module enable php:remi-{{ php_version }} -y"
@@ -19,4 +20,5 @@
       - php-curl
       - php-json
     update_cache: true
+  when: ansible_distribution == "Fedora"
 

@@ -1,2 +1,6 @@
 ---
-# defaults file for roles/core-dev-cli
+zsh: false
+dotnet: false
+jdk: false
+nodejs: true
+php: false

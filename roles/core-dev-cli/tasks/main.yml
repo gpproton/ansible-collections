@@ -1,6 +1,47 @@
 ---
 - name: setup essential packages
   ansible.builtin.include_tasks:
-    file: core-dev-packages.yml
+    file: dev-packages.yml
     apply:
       become: true
+
+- name: setup cli & alias options
+  ansible.builtin.include_tasks:
+    file: setup-cli.yml
+    apply:
+      become: true
+
+- name: setup zsh options
+  ansible.builtin.include_tasks:
+    file: setup-zsh.yml
+    apply:
+      become: true
+  when: zsh == True
+
+- name: setup dotnet
+  ansible.builtin.include_tasks:
+    file: setup-dotnet.yml
+    apply:
+      become: false
+  when: dotnet == True
+
+- name: setup PHP for Fedora
+  ansible.builtin.include_tasks:
+    file: setup-php.yml
+    apply:
+      become: true
+  when: php == True
+
+- name: setup nodejs
+  ansible.builtin.include_tasks:
+    file: setup-nodejs.yml
+    apply:
+      become: false
+  when: nodejs == True
+
+- name: setup jdk
+  ansible.builtin.include_tasks:
+    file: setup-jdk.yml
+    apply:
+      become: false
+  when: jdk == True
