@@ -1,0 +1,6 @@
+---
+- name: setup essential packages
+  ansible.builtin.include_tasks:
+    file: core-dev-packages.yml
+    apply:
+      become: true
