@@ -6,18 +6,18 @@
     # - core-options
     # - core-packages
   tasks:
-    # - name: setup core options
-    #   ansible.builtin.include_role:
-    #     name: core-options
-    # - name: setup core packages
-    #   ansible.builtin.include_role:
-    #     name: core-packages
+    - name: setup core options
+      ansible.builtin.include_role:
+        name: core-options
+    - name: setup core packages
+      ansible.builtin.include_role:
+        name: core-packages
     - name: setup cli tools 
       ansible.builtin.include_role:
         name: core-dev-cli
       vars:
         zsh: false
-        dotnet: true
+        dotnet: false
         jdk: false
         nodejs: false
         php: false
