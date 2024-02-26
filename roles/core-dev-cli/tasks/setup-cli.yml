@@ -18,11 +18,11 @@
 - name: setup shell assist alias
   become: false
   ansible.builtin.blockinfile:
-    path: $HOME/.bashrc
+    path: $HOME/.zshrc
     insertafter: EOF
     state: present
     block: |
       # shared source definitions
       if [ -f $HOME/.sharedrc ]; then
-          . $HOME/.sharedrc
+          source $HOME/.sharedrc
       fi

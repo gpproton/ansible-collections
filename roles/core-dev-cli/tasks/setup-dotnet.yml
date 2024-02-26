@@ -1,18 +1,18 @@
 ---
 - name: create .dotnet directory
   ansible.builtin.file:
-    path: "{{ dotnet_path }}"
+    path: "$HOME/.dotnet"
     state: directory
     mode: 0775
 
 - name: setup dotnet installer binary
   ansible.builtin.get_url:
     url: "https://dotnet.microsoft.com/download/dotnet/scripts/v1/dotnet-install.sh"
-    dest: "{{ dotnet_path }}/dotnet-install"
+    dest: "$HOME/.dotnet/dotnet-install"
     mode: a+x
 
 - name: setup dotnet LTS version
-  ansible.builtin.shell: "{{ dotnet_path }}/dotnet-install -c LTS --install-dir {{ dotnet_path }}"
+  ansible.builtin.shell: "$HOME/.dotnet/dotnet-install -c LTS --install-dir $HOME/.dotnet"
 
 - name: install additional dotnet packages
   become: true
@@ -22,5 +22,5 @@
       - mono-devel
 
 - name: install basic workloads
-  ansible.builtin.shell: "{{ dotnet_path }}/dotnet workload install wasm-tools wasm-experimental"
+  ansible.builtin.shell: "$HOME/.dotnet/dotnet workload install wasm-tools wasm-experimental"
 

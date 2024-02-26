@@ -43,5 +43,5 @@
   ansible.builtin.include_tasks:
     file: setup-jdk.yml
     apply:
-      become: false
+      become: true
   when: jdk == True

@@ -8,9 +8,10 @@
 
 - name: enable PHP {{ php_version }} remi repo
   shell: "dnf module enable php:remi-{{ php_version }} -y"
+  when: ansible_distribution == "Fedora"
 
 - name: install php package and common extensions
-  ansible.builtin.dnf:
+  ansible.builtin.package:
     name:
       - php
       - php-common
@@ -20,5 +21,3 @@
       - php-curl
       - php-json
     update_cache: true
-  when: ansible_distribution == "Fedora"
-

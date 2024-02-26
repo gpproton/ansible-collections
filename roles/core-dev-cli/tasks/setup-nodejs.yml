@@ -12,9 +12,9 @@
     export NVM_DIR="$HOME/.nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
     [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-    nvm install --lts
+    nvm install --lts --latest-npm
   when:
-    - not nvm_check.stat.exists
+    - nvm_check.stat.exists
 
 - name: ensuring pnpm Is Installed
   ansible.builtin.stat:
@@ -32,17 +32,17 @@
   register: bun_check
 
 - name: bun installation
-  shell: curl -fsSL https://bun.sh/install | bash
+  ansible.builtin.shell: curl -fsSL https://bun.sh/install | bash
   when:
     - not bun_check.stat.exists
 
-- name: global package installation
-  community.general.pnpm:
-    name: "{{ item }}"
-    global: true
-    state: latest
+- name: global npm packages installation
+  ansible.builtin.shell: |
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+    npm i -g {{ item }}
   with_items:
-    - npm
     - yarn
     - pnpm
     - typescript
@@ -50,5 +50,3 @@
     - tsx
     - rimraf
     - "@nestjs/cli"
-
-
