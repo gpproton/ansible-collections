@@ -3,7 +3,30 @@
   become: true
   pre_tasks: []
   roles:
-    - desktop-core-packages
-    - desktop-dev-tools
-    - desktop-dev-ide
-  tasks: []
+    # - core-options
+    # - core-packages
+  tasks:
+    - name: setup core options
+      ansible.builtin.include_role:
+        name: core-options
+    - name: setup core packages
+      ansible.builtin.include_role:
+        name: core-packages
+    - name: setup cli tools 
+      ansible.builtin.include_role:
+        name: core-dev-cli
+      vars:
+        zsh: false
+        dotnet: false
+        jdk: false
+        nodejs: false
+        php: false
+    # - name: setup core desktop packages 
+    #   ansible.builtin.include_role:
+    #     name: desktop-packages
+    # - name: setup desktop tools 
+    #   ansible.builtin.include_role:
+    #     name: desktop-tools
+    # - name: setup desktop ide's 
+    #   ansible.builtin.include_role:
+    #     name: desktop-ide

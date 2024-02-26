@@ -1,0 +1,26 @@
+---
+- name: update packages cache for Fedora
+  ansible.builtin.dnf:
+    update_cache: true
+  when: ansible_distribution == "Fedora"
+
+- name: update packages cache for Debian/Ubuntu
+  ansible.builtin.apt:
+    update_cache: yes
+  when: ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
+
+- name: upgrade all packages for Fedora
+  ansible.builtin.dnf:
+    name: "*"
+    state: latest
+    update_only: true
+  when: ansible_distribution == "Fedora"
+
+- name: Upgrade all packages for Debian/Ubuntu
+  ansible.builtin.apt:
+    name: "*"
+    state: latest
+    update_cache: yes
+    force_apt_get: yes
+    dpkg_options: "force-confdef,force-confold"
+  when: ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"

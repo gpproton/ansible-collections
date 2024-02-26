@@ -1,0 +1,11 @@
+---
+- name: setup essential packages for Fedora
+  ansible.builtin.include_tasks:
+    file: fedora-essentials.yml
+    apply:
+      become: true
+  when: ansible_distribution == "Fedora"
+
+- name: setup flatpak essentials packages
+  ansible.builtin.include_tasks:
+    file: flatpak-essentials.yml

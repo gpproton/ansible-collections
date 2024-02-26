@@ -1,0 +1,4 @@
+---
+# vars file for roles/core-dev-cli
+dotnet_path: $HOME/.dotnet
+php_version: 8.2

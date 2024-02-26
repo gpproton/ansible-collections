@@ -1,0 +1,12 @@
+---
+- name: install powerline fonts in Fedora
+  ansible.builtin.dnf:
+    name: powerline-fonts
+    state: present
+  when: ansible_distribution == "Fedora"
+
+- name: install powerline fonts in Debain or Ubuntu
+  ansible.builtin.apt:
+    name: fonts-powerline
+    state: present
+  when: ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"

@@ -1,7 +1,0 @@
----
-docker_compose_version: 2.23.0
-docker_max_log_size: 50m
-docker_config: /usr/local/lib/docker
-docker_compose_bin: /usr/local/bin/docker-compose
-dotnet_path: $HOME/.dotnet
-php_version: 8.2
