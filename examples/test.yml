@@ -17,7 +17,7 @@
         name: core-dev-cli
       vars:
         zsh: false
-        dotnet: false
+        dotnet: true
         jdk: false
         nodejs: false
         php: false
