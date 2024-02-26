@@ -8,3 +8,10 @@
     file: users.yml
     apply:
       become: true
+
+- name: fedora dnf config
+  ansible.builtin.include_tasks:
+    file: fedora-default-config.yml
+    apply:
+      become: true
+  when: ansible_distribution == "Fedora"
