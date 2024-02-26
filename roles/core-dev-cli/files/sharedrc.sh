@@ -1,5 +1,3 @@
-
-source $HOME/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
 ## start shell-assist
@@ -14,7 +12,7 @@ fi
 ## end shell-assist
 
 ## start dotnet
-export DOTNET_ROOT={{ dotnet_path }}
+export DOTNET_ROOT=$HOME/.dotnet
 export PATH=$PATH:$DOTNET_ROOT
 export PATH=$PATH:$DOTNET_ROOT/tools
 export ASPNETCORE_Kestrel__Certificates__Default__Password=""
@@ -32,6 +30,3 @@ export ANDROID_HOME=$HOME/Android/Sdk
 export PATH=$PATH:$ANDROID_HOME:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
-
-## Sample usage => avd <name-of-emulator> | emulator -list-avds
-function avd { cd "$(dirname "$(which emulator)")" && ./emulator -avd "$@"; }

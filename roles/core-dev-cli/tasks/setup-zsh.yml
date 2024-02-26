@@ -50,3 +50,13 @@
     dest: $HOME/zsh-autocomplete
     clone: yes
     update: yes
+
+- name: setup zsh-autocomplete
+  become: false
+  ansible.builtin.blockinfile:
+    path: $HOME/.zshrc
+    insertafter: EOF
+    state: present
+    block: |
+      # additonal setup for zsh completion
+      source $HOME/zsh-autocomplete/zsh-autocomplete.plugin.zsh
