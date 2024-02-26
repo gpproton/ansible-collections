@@ -6,6 +6,6 @@
       become: true
   when: ansible_distribution == "Fedora"
 
-- name: flatpak packages
+- name: setup flatpak essentials packages
   ansible.builtin.include_tasks:
-    file: flatpak-packages.yml
+    file: flatpak-essentials.yml
