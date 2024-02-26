@@ -33,18 +33,6 @@
     - key: POWERLEVEL9K_SHORTEN_STRATEGY
       value: truncate_to_last
 
-- name: install powerline fonts in Fedora
-  ansible.builtin.dnf:
-    name: powerline-fonts
-    state: present
-  when: ansible_distribution == "Fedora"
-
-- name: install powerline fonts in Debain or Ubuntu
-  ansible.builtin.dnf:
-    name: fonts-powerline
-    state: present
-  when: ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
-
 - name: fix for zsh error
   become: false
   ansible.builtin.blockinfile:
