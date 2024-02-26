@@ -1,7 +1,7 @@
 ---
 - name: setup github packages for Fedora
   ansible.builtin.include_tasks:
-    file: setup-github.yml
+    file: fedora-github-setup.yml
     apply:
       become: true
   when: ansible_distribution == "Fedora"
@@ -20,3 +20,6 @@
       become: true
   when: ansible_distribution == "Fedora"
 
+- name: setup docker packages for Fedora
+  ansible.builtin.include_tasks:
+    file: flatpak-tools.yml
