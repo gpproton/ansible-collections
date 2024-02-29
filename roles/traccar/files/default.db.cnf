@@ -1,0 +1,44 @@
+[client]
+default-character-set=utf8mb4 
+
+[mysql]
+default-character-set=utf8mb4
+
+[mysqld]
+init_connect='SET collation_connection = utf8mb4_bin'
+init_connect='SET NAMES utf8mb4'
+character-set-server=utf8mb4
+collation-server=utf8mb4_bin 
+skip-character-set-client-handshake
+
+# session memory settings
+read_buffer_size = 16M
+read_rnd_buffer_size = 32M
+sort_buffer_size = 32M
+tmp_table_size = 64M
+join_buffer_size = 128M
+thread_cache_size = 64
+
+# connection
+interactive_timeout = 1800
+wait_timeout = 1800
+lock_wait_timeout = 1800
+skip_name_resolve = 1
+max_connections = 1024
+max_user_connections = 256
+max_connect_errors = 1000000
+
+# innodb configs
+innodb_buffer_pool_size = 2G
+innodb_buffer_pool_instances = 64M
+innodb_lock_wait_timeout = 5
+innodb_io_capacity = 300
+innodb_io_capacity_max = 1000
+innodb_flush_method = O_DIRECT
+innodb_log_file_size = 128M
+innodb_log_buffer_size = 16M
+innodb_thread_concurrency = 8
+innodb_sort_buffer_size = 64M
+innodb_write_io_threads = 64M
+innodb_read_io_threads = 64M
+innodb_autoinc_lock_mode = 2

@@ -22,6 +22,11 @@ install with:
 
 ```bash
 ansible-galaxy install -r requirements.yml
+
+## Or
+
+ansible-galaxy install git+https://github.com/gpproton/ansible-collections.git
+ansible-galaxy install git+git@github:gpproton/ansible-collections.git
 ```
 
 ## Bash tweaks

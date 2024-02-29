@@ -1,0 +1,47 @@
+---
+- name: Get timestamp from the system
+  ansible.builtin.shell: "date +%Y-%m-%d-%H-%M-%S"
+  register: tstamp
+  when:
+    - inventory_hostname == deployment_node
+
+- name: create local config directory
+  ansible.builtin.file:
+    path: "{{ root_dir.path }}/temp"
+    state: directory
+  register: conf_dir
+  when:
+    - inventory_hostname == deployment_node
+
+- name: interpolate backup script file
+  ansible.builtin.template:
+    src: "clean.sh"
+    dest: "{{ root_dir.path }}/clean.sh"
+  register: cleanp
+  when:
+    - inventory_hostname == deployment_node
+
+- name: interpolate traccar config file
+  ansible.builtin.template:
+    src: "{{ config }}"
+    dest: "{{ conf_dir.path }}/{{ tstamp.stdout }}-config.xml"
+  register: configp
+  when:
+    - inventory_hostname == deployment_node
+
+- name: copy database config file
+  ansible.builtin.copy:
+    src: "{{ db_config }}"
+    dest: "{{ conf_dir.path }}/{{ tstamp.stdout }}-defaults.cnf"
+  register: db_configp
+  when:
+    - inventory_hostname == deployment_node
+
+- name: copy database schema file
+  ansible.builtin.copy:
+    src: "{{ changelog }}"
+    dest: "{{ conf_dir.path }}/{{ tstamp.stdout }}-changelog.xml"
+  register: changelogp
+  when:
+    - changelog != false
+    - inventory_hostname == deployment_node

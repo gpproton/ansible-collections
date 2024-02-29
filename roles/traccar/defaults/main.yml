@@ -1,0 +1,40 @@
+---
+selected_actions:
+  - folders
+  - configs
+  - deploy
+service_name: gps-track
+service_domain: app.gpstrack.ng
+service_image:  ghcr.io/drolx/track:5.10-alpine
+root: /opt/track
+service_replicas: 1
+web_port: 16081
+changelog: false # changelog.xml
+cloudflare: true
+network: gpstrack_net
+deployment_node: virt-10
+swarm_node: virt-10.srv.drolx.com
+db_clean_chunk: 10000
+backup_time: 3
+backup_count: 2
+backup_cron: "0 * */12 * *"
+log_level: warning
+cpu: 0.3
+memory: 1024m
+db_cpu: 0.5
+db_memory: 1024m
+db_host: db
+db_port: 3306
+db_name: traccar
+db_user: traccar
+db_pass: traccar
+db_root_pass: "{{ lookup('env', 'BASIC_PASSWORD') }}"
+config: config.xml
+db_config: default.db.cnf
+nominatim_url: http://nominatim_server:8080
+endpoints:
+  - name: osmand
+    internal: 5055
+    public: 5055
+    udp: false
+
