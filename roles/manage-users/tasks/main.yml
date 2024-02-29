@@ -1,2 +1,7 @@
 ---
-# tasks file for roles/manage-users
+
+- name: setup users defaults
+  ansible.builtin.include_tasks:
+    file: users-wheel-group.yml
+    apply:
+      become: true
