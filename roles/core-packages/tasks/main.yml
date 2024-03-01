@@ -5,9 +5,15 @@
     apply:
       become: true
 
-- name: setup additional repository & packages for Fedora
+- name: upgrade all packages
   ansible.builtin.include_tasks:
-    file: fedora-packages.yml
+    file: upgrade-packages.yml
+    apply:
+      become: true
+
+- name: setup additional repository for Fedora
+  ansible.builtin.include_tasks:
+    file: fedora-repositories.yml
     apply:
       become: true
   when: ansible_distribution == "Fedora"
