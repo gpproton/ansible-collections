@@ -9,6 +9,7 @@ authors:
 description: Personal ansible collection
 license:
   - MIT
+dependencies: {}
 tags:
   - gpproton
   - common
@@ -22,6 +23,7 @@ tags:
   - infrastructure
   - terraform
 repository: https://github.com/gpproton/ansible-collections
+documentation: https://github.com/gpproton/ansible-collections
 issues: https://github.com/gpproton/ansible-collections/issues
 build_ignore:
   - .gitignore
