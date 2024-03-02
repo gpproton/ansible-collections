@@ -8,31 +8,22 @@ A personal collection of ansible tasks and roles
 
 ```shell
 ## Debian/Ubuntu
-sudo apt install -y python3 python3-virtualenv
+sudo apt install -y python3 python3-virtualenv python3-virtualenv-clone
 ## Fedora
-sudo dnf install -y python3 python3-virtualenv
+sudo dnf install -y python3 python3-virtualenv python3-virtualenv-clone
 ```
 
 Setup requirements on user profile
 
 ```shell
-python3 -m pip install --upgrade --user molecule "molecule-plugins[docker,lint]" docker ansible ansible-lint setuptools yamllint wheel
+pip install --upgrade --user pipenv
 ```
 
 Create virtual environment for unix OS
 
 ```shell
-python3 -m venv venv && \
-source venv/bin/activate && \
-python3 -m pip install molecule "molecule-plugins[docker,lint]" docker ansible ansible-lint yamllint wheel
-```
-
-## Environment setup for Windows
-
-```shell
-python3 -m venv venv
-.\venv\Scripts\activate
-python3 -m pip install molecule "molecule-plugins[docker,lint]" docker ansible ansible-lint yamllint wheel
+pipenv install
+pipenv shell
 ```
 
 ## Usage
