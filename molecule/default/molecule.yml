@@ -1,8 +1,62 @@
 ---
+dependency:
+  name: galaxy
+  options:
+    ignore-certs: True
+    ignore-errors: True
+    role-file: requirements.yml
+    requirements-file: collections.yml
+
+# driver:
+#   name: vagrant
+#   provider:
+#     name: libvirt
+#     type: libvirt
+#     options:
+#       memory: 192
+#       cpus: 2
+# platforms:
+#   - name: debian
+#     box: debian/bullseye64
+#     interfaces:
+#       - auto_config: true
+#         network_name: private_network
+#         type: static
+#         ip: 192.168.10.10
+
 driver:
-  name: default
+  name: docker
 platforms:
-  - name: instance
-    # you might want to add your own variables here based on what provisioning
-    # you are doing like:
-    # image: quay.io/centos/centos:stream8
+  - name: Fedora
+    image: docker.io/fedora:39
+    tmpfs:
+      - /run
+      - /tmp
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    capabilities:
+      - SYS_ADMIN
+    command: "/usr/sbin/init"
+    pre_build_image: true
+  - name: Fbuntu
+    image: docker.io/ubuntu:jammy
+    cmd: /lib/systemd/systemd
+    tmpfs:
+      - /run
+      - /tmp
+    privileged: true
+    pre_build_image: false
+    override_command: false
+provisioner:
+  name: ansible
+  log: true
+  instance:
+    ansible_user: ansible
+  scenario:
+    name: default
+verifier:
+  name: ansible
+lint: |
+  set -e
+  yamllint .
+  ansible-lint .
