@@ -38,8 +38,17 @@ platforms:
       - SYS_ADMIN
     command: "/usr/sbin/init"
     pre_build_image: true
-  - name: Fbuntu
+  - name: Ubuntu
     image: docker.io/ubuntu:jammy
+    cmd: /lib/systemd/systemd
+    tmpfs:
+      - /run
+      - /tmp
+    privileged: true
+    pre_build_image: false
+    override_command: false
+  - name: Debian
+    image: docker.io/debian:bookworm
     cmd: /lib/systemd/systemd
     tmpfs:
       - /run
