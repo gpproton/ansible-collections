@@ -2,6 +2,39 @@
 
 A personal collection of ansible tasks and roles
 
+## Setup requirments
+
+### Python setup
+
+```shell
+## Debian/Ubuntu
+sudo apt install -y python3 python3-virtualenv
+## Fedora
+sudo dnf install -y python3 python3-virtualenv
+```
+
+Setup requirements on user profile
+
+```shell
+python3 -m pip install --upgrade --user molecule ansible ansible-lint setuptools
+```
+
+Create virtual environment for unix OS
+
+```shell
+python3 -m virtualenv venv && \
+source venv/bin/activate && \
+python3 -m pip install molecule ansible ansible-lint
+```
+
+## Environment setup for Windows
+
+```powershell
+python3 -m virtualenv venv
+.\venv\Scripts\activate
+python3 -m pip install molecule ansible ansible-lint
+```
+
 ## Usage
 
 Create requirement file
