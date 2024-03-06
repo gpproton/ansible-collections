@@ -1,0 +1,31 @@
+---
+
+- include_tasks: install.yml
+  tags:
+    - zsh
+    - install
+
+- include_tasks: configure.yml
+  tags:
+    - zsh
+    - configure
+
+- include_tasks: post-install.yml
+  tags:
+    - zsh
+    - install
+    - post_install
+
+- include_tasks: source-for-users-shared.yml
+  tags:
+    - zsh
+    - install
+  when: zsh_shared and zsh_source_for_all_users
+
+- name: Reset antigen cache
+  command: "timeout 10s /bin/zsh -c 'source {{ zsh_config }}; antigen reset'"
+  become: yes
+  become_user: "{{ zsh_user }}"
+  changed_when: false
+  failed_when: false
+  tags: always
