@@ -9,7 +9,7 @@
 
     - name: setup cli tools
       ansible.builtin.include_role:
-        name: core-dev-cli
+        name: core-dev
       vars:
         zsh: false
         dotnet: false
