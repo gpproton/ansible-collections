@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 yarn install
 pip install --upgrade --user pipenv
 pipenv install
