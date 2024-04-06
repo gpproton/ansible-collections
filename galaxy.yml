@@ -1,6 +1,6 @@
 ---
 namespace: gpproton
-name: core
+name: shared
 version: 0.0.1
 readme: README.md
 license_file: LICENSE.md

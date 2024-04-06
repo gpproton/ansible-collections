@@ -1,0 +1,4 @@
+#!/bin/bash
+MOLECULE_PLAYBOOK="${1:-role-default.yml}"
+echo "running test for ${MOLECULE_PLAYBOOK}..."
+molecule test

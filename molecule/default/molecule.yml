@@ -26,7 +26,7 @@ provisioner:
   scenario:
     name: default
   playbooks:
-    converge: ${MOLECULE_PLAYBOOK:-converge.yml}
+    converge: ${MOLECULE_PLAYBOOK:-role-default.yml}
   env:
     ANSIBLE_ROLES_PATH: "../../roles"
 

@@ -15,8 +15,7 @@ setup:
 	@./tools/setup.sh
 
 install:
-	yarn install
-	pipenv install
+	./init.sh
 
 # remove the build and log folders
 clean:

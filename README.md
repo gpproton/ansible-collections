@@ -13,17 +13,15 @@ sudo apt install -y python3 python3-virtualenv python3-virtualenv-clone
 sudo dnf install -y python3 python3-virtualenv python3-virtualenv-clone
 ```
 
-Setup requirements on user profile
-
-```shell
-pip install --upgrade --user pipenv
-```
-
 Create virtual environment for unix OS
 
 ```shell
-pipenv install
-pipenv shell
+./init.sh
+```
+
+Run molecule test for a role
+```shell
+./test role-default.yml
 ```
 
 ## Usage
@@ -37,7 +35,7 @@ touch requirements.yml
 ```yaml
 ---
 collections:
-  - name: https://github.com/gpproton/ansible-collections.git
+  - name: git@github.com:gpproton/ansible-collections.git
     type: git
     version: main
 ```
@@ -45,13 +43,8 @@ collections:
 install with:
 
 ```bash
-ansible-galaxy install -r requirements.yml
+ansible-galaxy install --force -r requirements.yml
 
-## Or
-
-ansible-galaxy install git+https://github.com/gpproton/ansible-collections.git
-ansible-galaxy install git+git@github:gpproton/ansible-collections.git
-```
 
 ## Bash tweaks
 

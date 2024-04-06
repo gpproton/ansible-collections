@@ -1,12 +1,8 @@
 ---
-- name: Converge
+- name: core-dev cli tools
   hosts: all
   become: true
   tasks:
-    - name: Update apt cache.
-      ansible.builtin.apt: update_cache=yes cache_valid_time=600
-      when: ansible_os_family == 'Debian'
-
     - name: setup cli tools
       ansible.builtin.include_role:
         name: core-dev
