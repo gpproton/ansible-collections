@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 ---
 - name: converge default
   hosts: all
@@ -7,23 +6,3 @@
     - name: Update apt cache.
       ansible.builtin.apt: update_cache=yes cache_valid_time=600
       when: ansible_os_family == 'Debian'
-=======
----
-- name: Converge
-  hosts: all
-  become: true
-  tasks:
-    - name: Update apt cache.
-      ansible.builtin.apt: update_cache=yes cache_valid_time=600
-      when: ansible_os_family == 'Debian'
-
-    - name: setup cli tools
-      ansible.builtin.include_role:
-        name: core-dev
-      vars:
-        zsh: false
-        dotnet: false
-        jdk: false
-        nodejs: false
-        php: false
->>>>>>> Stashed changes
