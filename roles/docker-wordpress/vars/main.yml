@@ -1,2 +1,6 @@
 ---
 # vars file for roles/wordpress
+instance: xx
+swarm: false
+data_path: /opt/xx
+content_path: /opt/xx

@@ -1,0 +1,45 @@
+version: '3.9'
+
+networks:
+  proxy:
+    name: traefik_net
+    external: true
+
+services:
+  wordpress:
+    image: wordpress:6.3
+    environment:
+      - WORDPRESS_DB_HOST=mysql:3306
+      - WORDPRESS_DB_USER=wordpress
+      - WORDPRESS_DB_PASSWORD=wordpress
+      - WORDPRESS_DB_NAME=wordpress
+      - WORDPRESS_TABLE_PREFIX=wpx_
+    volumes:
+      - "{{ protrack_path }}:/var/www/html/wp-content"
+    networks:
+      - proxy
+      - default
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints:
+          - node.hostname == {{ core_hostname }}
+      resources:
+        limits:
+          cpus: "0.2"
+          memory: 256M
+        reservations:
+          cpus: "0.025"
+          memory: 128M
+      labels:
+        traefik.enable: "true"
+        traefik.http.services.protrack.loadbalancer.server.port: 80
+        traefik.http.middlewares.protrack-behind-proxy.headers.customrequestheaders.X-Forwarded-Proto: https
+        traefik.http.routers.protrack.rule: Host(`protrack.ng`) || Host(`www.protrack.ng`)
+        traefik.http.routers.protrack.entrypoints: web-secure
+        traefik.http.routers.protrack.service: protrack
+        traefik.http.routers.protrack.tls.certresolver: cloudflare
+        traefik.http.routers.protrack.tls.domains[0].main: protrack.ng
+        traefik.http.routers.protrack.tls.domains[0].sans: "www.protrack.ng"
+        traefik.http.routers.protrack.middlewares: redirect-www-to-non-www@file, protrack-behind-proxy
