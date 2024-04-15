@@ -1,0 +1,26 @@
+galaxy_info:
+  author: Godwin peter .O <me@godwin.dev>
+  description: role for CLI based applications for developments
+  company: ""
+  license: MIT
+  min_ansible_version: "2.1"
+  platforms:
+  - name: Fedora
+    versions:
+    - all
+    - "38"
+    - "39"
+  - name: Debian
+    versions:
+    - all
+    - "buster"
+    - "bullseye"
+    - "bookworm"
+  - name: Ubuntu
+    versions:
+    - all
+    - focal
+    - jammy
+  galaxy_tags: []
+dependencies:
+  - role: viasite-ansible.zsh

@@ -1,5 +1,6 @@
 ---
 roles:
   - name: viasite-ansible.zsh
+    version: 3.6.1
 collections:
   - name: community.general

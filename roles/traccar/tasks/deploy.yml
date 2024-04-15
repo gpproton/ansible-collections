@@ -1,0 +1,12 @@
+---
+- name: interpolate docker-compose file
+  ansible.builtin.template:
+    src: docker-compose.yaml
+    dest: "{{ root_dir.path }}/docker-compose.yaml"
+  when:
+    - inventory_hostname == deployment_node
+
+- name: deploy {{ service_name }} stack in swarm
+  ansible.builtin.command: "docker stack deploy --compose-file {{ root_dir.path }}/docker-compose.yaml --prune {{ service_name }}"
+  when:
+    - inventory_hostname == deployment_node

@@ -1,0 +1,4 @@
+#!/bin/bash
+export MOLECULE_PLAYBOOK="${1:-converge.yml}"
+echo "running test for ${MOLECULE_PLAYBOOK}..."
+molecule test

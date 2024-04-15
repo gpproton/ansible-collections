@@ -1,13 +1,41 @@
 ---
-- name: install essential utility packages
+- name: install essential packages
   ansible.builtin.package:
+    state: latest
     name:
       - git
       - bash
-      - zsh
       - curl
       - wget
       - zip
       - unzip
       - file
-    state: present
+      - python3
+      - python3-pip
+      - python3-setuptools
+      - python3-virtualenv
+      - python3-virtualenv-clone
+      - ca-certificates
+
+- name: install debian/ubuntu essential packages
+  apt:
+    state: latest
+    pkg:
+      - software-properties-common
+      - apt-transport-https
+      - lsb-release
+      - apache2-utils
+      - gnupg-agent
+      - libssl-dev
+  when: ansible_distribution == "Ubuntu" or ansible_distribution == "Debian"
+
+- name: install fedora essential packages
+  ansible.builtin.dnf:
+    state: latest
+    name:
+      - gcc
+      - lsb_release
+      - openssl-devel
+      - python3-devel
+      - python3-libselinux
+  when: ansible_distribution == "Fedora"

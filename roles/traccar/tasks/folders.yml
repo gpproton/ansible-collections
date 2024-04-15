@@ -1,0 +1,54 @@
+---
+- name: create root directory
+  file:
+    path: "{{ root }}/{{ service_name }}"
+    state: directory
+  register: root_dir
+  when:
+    - inventory_hostname == deployment_node
+
+- name: create local data directory
+  file:
+    path: "{{ root_dir.path }}/data"
+    state: directory
+  register: data_dir
+  when:
+    - inventory_hostname == deployment_node
+
+- name: create iot logs directory
+  file:
+    path: "/var/log/track/{{ service_name }}"
+    state: directory
+    group: users
+    mode: 0775
+  register: log_dir
+
+- name: create backup directory
+  file:
+    path: "{{ root_dir.path }}/backups"
+    state: directory
+    group: users
+    mode: 0775
+    recurse: yes
+  register: backup_dir
+  when:
+    - inventory_hostname == deployment_node
+
+- name: create media directory
+  file:
+    path: "{{ root_dir.path }}/media"
+    state: directory
+    group: users
+    mode: 0775
+    recurse: yes
+  register: media_dir
+  when:
+    - inventory_hostname == deployment_node
+
+- name: copy web asset directory
+  ansible.builtin.copy:
+    src: "assets/"
+    dest: "{{ root_dir.path }}/assets"
+  register: asset_dir
+  when:
+    - inventory_hostname == deployment_node

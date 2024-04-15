@@ -1,0 +1,14 @@
+---
+actions:
+  - folders
+  - configs
+  - deploy
+  - backup
+  - remove
+
+selected_actions:
+  - folders
+  - configs
+  - deploy
+  - backup
+  - remove

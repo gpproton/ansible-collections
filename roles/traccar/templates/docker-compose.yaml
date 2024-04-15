@@ -1,0 +1,166 @@
+version: "3.9"
+
+networks:
+  net:
+    name: {{ network }}
+    external: true
+  proxy:
+    name: traefik_net
+    external: true
+
+configs:
+  db_config:
+    file: "{{ db_configp.dest }}"
+  config:
+    file: "{{ configp.dest }}"
+{% if changelog != false %}
+  changelog:
+    file: "{{ changelogp.dest }}"
+{% endif %}
+
+services:
+  db:
+    image: mariadb:10.10
+    configs:
+      - source: db_config
+        target: /etc/mysql/conf.d/defaults.cnf
+    environment:
+      - "MYSQL_DATABASE={{ db_name }}"
+      - "MYSQL_USER={{ db_user }}"
+      - "MYSQL_PASSWORD={{ db_pass }}"
+      - "MYSQL_ROOT_PASSWORD={{ db_root_pass }}"
+    deploy:
+      mode: replicated
+      replicas: 1
+      update_config:
+        parallelism: 1
+        delay: 30s
+      placement:
+        constraints:
+          - node.hostname == {{ swarm_node }}
+      resources:
+        limits:
+          cpus: "{{ db_cpu }}"
+          memory: {{ db_memory }}
+        reservations:
+          cpus: "0.075"
+          memory: 16M
+    networks:
+      - net
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - {{ data_dir.path }}:/var/lib/mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
+    healthcheck:
+      test:  "mysqladmin ping -h 127.0.0.1 -u $MYSQL_USER --password=$MYSQL_PASSWORD"
+      interval: 60s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  iot:
+    image: {{ service_image }}
+    networks:
+      - net
+      - proxy
+    ports:
+{% for item in endpoints %}
+      - "{{ item.public }}:{{ item.internal }}"
+{% if item.udp == true %}
+      - "{{ item.public }}:{{ item.internal }}/udp"
+{% endif %}
+{% endfor %}
+    configs:
+      - source: config
+        target: /opt/traccar/conf/traccar.xml
+{% if changelog != false %}
+      - source: changelog
+        target: /opt/traccar/schema/changelog-master.xml
+{% endif %}
+    volumes:
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+      - {{ log_dir.path }}:/opt/traccar/logs:rw
+      - {{ media_dir.path }}:/opt/traccar/media:rw
+      - {{ asset_dir.dest }}:/opt/traccar/assets:rw
+    deploy:
+      mode: replicated
+      replicas: {{ service_replicas }}
+      update_config:
+        parallelism: 1
+        delay: 30s
+      resources:
+        limits:
+          cpus: "{{ cpu }}"
+          memory: "{{ memory }}"
+        reservations:
+          cpus: "0.075"
+          memory: 128M
+      labels:
+        swarm.cronjob.enable: "true"
+        swarm.cronjob.schedule: "0 1 */3 * *"
+        swarm.cronjob.skip-running: "false"
+        traefik.enable: "true"
+        traefik.http.services.iot-{{ tag }}.loadbalancer.server.port: 8082
+        traefik.http.routers.iot-{{ tag }}.rule: Host(`{{ service_domain }}`) || Host(`{{ service_name }}.{{ root_domain }}`)
+        traefik.http.routers.iot-{{ tag }}.entrypoints: web-secure
+        traefik.http.routers.iot-{{ tag }}.service: iot-{{ tag }}
+        traefik.http.routers.iot-{{ tag }}.tls: "true"
+        traefik.http.routers.iot-{{ tag }}.tls.domains[0].main: "{{ service_domain }}"
+        traefik.http.routers.iot-{{ tag }}.tls.domains[1].main: "{{ service_name }}.{{ root_domain }}"
+        {% if cloudflare == true %}
+
+        traefik.http.routers.iot-{{ tag }}.tls.certresolver: cloudflare
+        {% else %}
+
+        traefik.http.routers.iot-{{ tag }}.tls.certresolver: default
+        {% endif %}
+    
+    ulimits:
+      rtprio: 95
+      memlock: -1
+      nproc: 1024000
+      nofile:
+        soft: 1024000
+        hard: 1024000
+    entrypoint: ["java", "-Xms512m", "-Xmx{{ memory }}", "-Djava.net.preferIPv4Stack=true"]
+    command: ["-jar", "tracker-server.jar", "conf/traccar.xml"]
+    healthcheck:
+      test:
+        ["CMD", "printf", "\"GET / HTTP/1.1\n\n\" > /dev/tcp/127.0.0.1/5055"]
+      interval: 60s
+      timeout: 120s
+      retries: 7
+      start_period: 45s
+
+  cleanup:
+    image: mariadb:11-jammy
+    command: bash -c /var/cleanup.sh
+    volumes:
+      - {{ cleanp.dest }}:/cleanup.sh:ro
+    deploy:
+      labels:
+        - "swarm.cronjob.enable=true"
+        - "swarm.cronjob.schedule=0 23 * * *"
+        - "swarm.cronjob.skip-running=true"
+      replicas: 0
+      restart_policy:
+        condition: none
+    networks:
+      - net
+
+  backup:
+    image: fradelg/mysql-cron-backup:1.13.1
+    volumes:
+      - {{ backup_dir.path }}:/backup
+    environment:
+      - TZ=Africa/Lagos
+      - MYSQL_HOST=db
+      - MYSQL_USER={{ db_user }}
+      - MYSQL_PASS={{ db_pass }}
+      - MYSQL_DB={{ db_name }}
+      - MAX_BACKUPS={{ backup_count }}
+      - INIT_BACKUP=0
+      - CRON_TIME=0 3 * * *
+      - GZIP_LEVEL=9

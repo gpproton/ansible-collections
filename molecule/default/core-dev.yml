@@ -1,0 +1,14 @@
+---
+- name: core-dev cli tools
+  hosts: all
+  become: true
+  tasks:
+    - name: setup cli tools
+      ansible.builtin.include_role:
+        name: core-dev
+      vars:
+        zsh: false
+        dotnet: false
+        jdk: false
+        nodejs: false
+        php: false

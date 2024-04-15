@@ -1,0 +1,149 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE properties SYSTEM 'http://java.sun.com/dtd/properties.dtd'>
+<properties>
+
+<entry key='config.default'>./conf/default.xml</entry>
+
+<!-- Web configurations -->
+<entry key='web.timeout'>36000</entry>
+<entry key='web.sessionTimeout'>432000</entry>
+<entry key='web.persistSession'>true</entry>
+<entry key='web.origin'>*</entry>
+<entry key='web.console'>false</entry>
+<entry key='web.debug'>false</entry>
+<entry key='web.cacheControl'>max-age=7200,public</entry>
+<entry key='web.sameSiteCookie'>Lax</entry>
+<entry key='web.override'>./assets</entry>
+
+<!-- command queues -->
+<entry key='commands.queueing'>true</entry>
+
+<!-- folder heirachy -->
+<entry key='deviceManager.lookupGroupsAttribute'>true</entry>
+
+<!-- adjusted logger level -->
+<entry key='logger.enable'>true</entry>
+<entry key='logger.level'>{{ log_level }}</entry>
+<entry key='logger.file'>./logs/traccar.log</entry>
+<entry key='logger.rotate'>true</entry>
+
+<!-- geocoder configuration section -->
+<entry key='geocoder.enable'>true</entry>
+<entry key='geocoder.type'>nominatim</entry>
+<entry key='geocoder.url'>{{ nominatim_url }}/reverse</entry>
+<!-- additional geocoder configurations -->
+<entry key='geocoder.onRequest'>false</entry>
+<entry key='geocoder.processInvalidPositions'>false</entry>
+<entry key='geocoder.ignorePositions'>false</entry>
+<entry key='geocoder.reuseDistance'>20</entry>
+
+<!-- distance config -->
+<entry key='distance.enable'>true</entry>
+
+<!-- databse configurations -->
+<entry key='database.changelog'>./schema/changelog-master.xml</entry>
+<entry key='database.driver'>com.mysql.cj.jdbc.Driver</entry>
+<entry key='database.url'>jdbc:mysql://{{ db_host }}:{{ db_port }}/{{ db_name }}?serverTimezone=UTC&amp;allowPublicKeyRetrieval=true&amp;useSSL=false&amp;allowMultiQueries=true&amp;autoReconnect=true&amp;useUnicode=yes&amp;characterEncoding=UTF-8&amp;sessionVariables=sql_mode=''</entry>
+<entry key='database.user'>{{ db_user }}</entry>
+<entry key='database.password'>{{ db_pass }}</entry>
+<entry key='database.ignoreUnknown'>true</entry>
+<entry key='database.throttleUnknown'>true</entry>
+<entry key='database.registerUnknown'>true</entry>
+<entry key='database.registerUnknown.defaultGroupId'>1</entry>
+<entry key='database.maxPoolSize'>50</entry>
+
+<!-- status detection Settings -->
+<entry key='status.timeout'>5700</entry>
+<entry key='server.timeout'>120</entry>
+
+<!-- device specifics -->
+<entry key='gps103.timeout'>20</entry>
+<entry key='tk103.timeout'>15</entry>
+<entry key='osmand.timeout'>300</entry>
+<entry key='h02.timeout'>15</entry>
+
+<!-- extra attributes handling-->
+<entry key='h02.extended'>true</entry>
+<entry key='gps103.extended'>true</entry>
+<entry key='tk103.extended'>true</entry>
+<entry key='gt06.decodeLow'>true</entry>
+
+<!-- quick Offline and Online disabling configurations -->
+<entry key='osmand.ignoreSessionCache'>true</entry>
+<entry key='status.ignoreOffline'>h02,tk103,gps103,gt06,osmand</entry>
+
+<!-- trip and movement Rules -->
+<entry key='report.periodLimit'>5356800</entry>
+<entry key='report.trip.minimalTripDuration'>300</entry>
+<entry key='report.trip.minimalTripDistance'>250</entry>
+<entry key='report.trip.minimalParkingDuration'>300</entry>
+<entry key='report.trip.minimalNoDataDuration'>300</entry>
+<entry key='report.trip.greedyParking'>true</entry>
+<entry key='report.trip.useIgnition'>true</entry>
+
+<!-- events rules -->
+<entry key='event.motion.speedThreshold'>1.2</entry>
+<entry key='event.overspeed.notRepeat'>true</entry>
+<entry key='event.ignoreDuplicateAlerts'>true</entry>
+<entry key='event.motion.processInvalidPositions'>false</entry>
+<entry key='status.updateDeviceState'>true</entry>
+<entry key='speedLimit'>66.78</entry>
+
+<!-- server filters -->
+<entry key='filter.enable'>true</entry>
+<entry key='filter.relative'>true</entry>
+<entry key='filter.maxSpeed'>110</entry>
+<entry key='filter.future'>32400</entry>
+<entry key='filter.zero'>true</entry>
+<entry key='filter.outdated'>true</entry>
+<entry key='filter.invalid'>true</entry>
+<entry key='filter.duplicate'>true</entry>
+<entry key='filter.skipLimit'>21600</entry>
+<entry key='filter.skipAlarm'>true</entry>
+<entry key='filter.skipAttributes.enable'>true</entry>
+<entry key='filter.skipAttributes'>alarm,result</entry>
+<entry key='filter.minPeriod'>120</entry> 
+<!-- optional filters-->
+<entry key='filter.distance'>150</entry>
+<entry key='filter.distanceMaxSkip'>850</entry>
+
+<!-- sensor copy Settings -->
+<entry key='processing.copyAttributes.enable'>true</entry>
+<entry key='processing.copyAttributes'>ignition,power,battery,batteryLevel,charge,driverUniqueId,satellites,rssi</entry>
+<entry key='processing.remoteAddress.enable'>false</entry>
+
+<!-- coordinate errors filters -->
+<entry key='coordinates.filter'>true</entry>
+<entry key='coordinates.maxError'>90000</entry>
+<entry key='coordinates.minError'>105</entry>
+
+<!-- notification config -->
+<entry key='notificator.types'>web,mail,command</entry>
+
+<!-- SMS notifitcation config -->
+<!-- TODO: review content type error -->
+<entry key='sms.http.url'>http://virt-00.srv.tsl.ng:8085/cgi-bin/sendsms</entry>
+<entry key='sms.http.template'>
+    &lt;message&gt;
+        &lt;submit&gt;
+            &lt;da&gt;&lt;number&gt;{phone}&lt;/number&gt;&lt;/da&gt;
+            &lt;from&gt;
+            &lt;username&gt;playsms&lt;/username&gt;
+            &lt;password&gt;playsms&lt;/password&gt;
+            &lt;/from&gt;
+            &lt;ud&gt;{message}&lt;/ud&gt;
+        &lt;/submit&gt;
+    &lt;/message&gt;
+</entry>
+
+<!-- SMTP notifitcation config -->
+<entry key='mail.smtp.host'>mail.drolx.com</entry>
+<entry key='mail.smtp.port'>587</entry>
+<entry key='mail.smtp.starttls.enable'>true</entry>
+<entry key='mail.smtp.ssl.trust'>*</entry>
+<entry key='mail.smtp.auth'>true</entry>
+<entry key='mail.smtp.username'>noreply@drolx.com</entry>
+<entry key='mail.smtp.password'>drolx-notify@2024</entry>
+<entry key='mail.smtp.from'>noreply@drolx.com</entry>
+
+</properties>

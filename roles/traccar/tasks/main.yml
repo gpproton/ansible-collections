@@ -1,0 +1,26 @@
+---
+- name: setup required directories
+  ansible.builtin.include_tasks:
+    file: "{{ item }}.yml"
+    apply:
+      become: true
+  with_items: "{{ selected_actions }}"
+  when: item in actions
+
+# - name: setup required directories
+#   ansible.builtin.include_tasks:
+#     file: folders.yml
+#     apply:
+#       become: true
+
+# - name: setup required directories
+#   ansible.builtin.include_tasks:
+#     file: configs.yml
+#     apply:
+#       become: true
+
+# - name: setup required directories
+#   ansible.builtin.include_tasks:
+#     file: deploy.yml
+#     apply:
+#       become: true

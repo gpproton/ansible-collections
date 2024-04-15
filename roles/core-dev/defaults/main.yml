@@ -1,0 +1,6 @@
+---
+zsh: false
+dotnet: false
+jdk: false
+nodejs: true
+php: false
