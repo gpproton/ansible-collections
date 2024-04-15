@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 ---
 namespace: gpproton
 name: shared
@@ -27,3 +28,34 @@ documentation: https://github.com/gpproton/ansible-collections
 issues: https://github.com/gpproton/ansible-collections/issues
 build_ignore:
   - .gitignore
+=======
+---
+namespace: gpproton
+name: core
+version: 0.0.1
+readme: README.md
+license_file: LICENSE.md
+authors:
+  - Godwin peter .O <me@godwin.dev>
+description: Personal ansible collection
+license:
+  - MIT
+dependencies: {}
+tags:
+  - gpproton
+  - common
+  - collection
+  - random
+  - linux
+  - windows
+  - util
+  - docker
+  - kubernetes
+  - infrastructure
+  - terraform
+repository: https://github.com/gpproton/ansible-collections
+documentation: https://github.com/gpproton/ansible-collections
+issues: https://github.com/gpproton/ansible-collections/issues
+build_ignore:
+  - .gitignore
+>>>>>>> Stashed changes
