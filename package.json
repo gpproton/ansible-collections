@@ -3,24 +3,24 @@
     "version": "0.0.1",
     "description": "",
     "scripts": {
-      "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1"
     },
     "repository": {
-      "type": "git",
-      "url": "git+https://github.com/gpproton/ansible-collections.git"
+        "type": "git",
+        "url": "git+https://github.com/gpproton/ansible-collections.git"
     },
     "author": "radioActive DROID <me@godwin.dev>",
     "license": "MIT",
     "bugs": {
-      "url": "https://github.com/gpproton/ansible-collections/issues"
+        "url": "https://github.com/gpproton/ansible-collections/issues"
     },
     "homepage": "https://github.com/gpproton/ansible-collections#readme",
     "dependencies": {
-      "editorconfig-checker": "^5.0.1",
-      "markdownlint-cli2": "^0.6.0",
-      "textlint": "^12.5.1",
-      "textlint-rule-common-misspellings": "^1.0.1",
-      "textlint-rule-no-todo": "^2.0.1",
-      "textlint-rule-terminology": "^3.0.4"
+        "editorconfig-checker": "^6.0.1",
+        "markdownlint-cli2": "^0.18.1",
+        "textlint": "^15.2.0",
+        "textlint-rule-common-misspellings": "^1.0.1",
+        "textlint-rule-no-todo": "^2.0.1",
+        "textlint-rule-terminology": "^5.2.13"
     }
-  }
+}

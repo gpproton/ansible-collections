@@ -5,7 +5,7 @@ version: 0.0.1
 readme: README.md
 license_file: LICENSE.md
 authors:
-  - Godwin peter .O <me@godwin.dev>
+  - Godwin Peter .O <me@godwin.dev>
 description: Personal ansible collection
 license:
   - MIT
